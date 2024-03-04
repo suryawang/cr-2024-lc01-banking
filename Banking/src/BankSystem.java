@@ -79,15 +79,13 @@ public class BankSystem extends JFrame implements ActionListener, ItemListener {
 
 		UIManager.addPropertyChangeListener (new UISwitchListener ((JComponent)getRootPane()));
 
-		//Creating the MenuBar.
-		bar = new JMenuBar ();
+		setupMenuBar();
 
 		//Setting the Main Window of Program.
 		//setIconImage (getToolkit().getImage ("Images/Bank.gif")));
 		setIconImage (new ImageIcon(ClassLoader.getSystemResource ("Images/Bank.gif")).getImage());
 		
 		setSize (700, 550);
-		setJMenuBar (bar);
 
 		//Closing Code of Main Window.
 		addWindowListener (new WindowAdapter () {
@@ -353,6 +351,12 @@ public class BankSystem extends JFrame implements ActionListener, ItemListener {
 		//Showing The Main Form of Application.
 		setVisible (true);
 
+	}
+
+	private void setupMenuBar() {
+		//Creating the MenuBar.
+		bar = new JMenuBar ();
+		setJMenuBar(bar);
 	}
 
 	//Function For Performing different Actions By Menus of Program.
