@@ -582,7 +582,7 @@ public class BankSystem extends JFrame implements ActionListener, ItemListener {
 	void getAccountNo () {
 
 		String printing;
-		db.rows = 0;
+		db.setRows(0);
 		boolean b = populateArray ();
 		if (b == false) { }
 		else {
@@ -610,21 +610,21 @@ public class BankSystem extends JFrame implements ActionListener, ItemListener {
 
 		boolean b = false;
 		try {
-			db.fis = new FileInputStream ("Bank.dat");
-			db.dis = new DataInputStream (db.fis);
+			db.setFis(new FileInputStream ("Bank.dat"));
+			db.setDis(new DataInputStream (db.getFis()));
 			//Loop to Populate the Array.
 			while (true) {
 				String r[] = new String[6];
 				for (int i = 0; i < 6; i++) {
-					r[i] = db.dis.readUTF ();
+					r[i] = db.getDis().readUTF ();
 				}
-				db.records[db.rows] = DataRecord.from(r);
-				db.rows++;
+				db.getRecords()[db.getRows()] = DataRecord.from(r);
+				db.setRows(db.getRows() + 1);
 			}
 		}
 		catch (Exception ex) {
-			db.total = db.rows;
-			if (db.total == 0) {
+			db.setTotal(db.getRows());
+			if (db.getTotal() == 0) {
 				JOptionPane.showMessageDialog (null, "Records File is Empty.\nEnter Records First to Display.",
 					 "BankSystem - EmptyFile", JOptionPane.PLAIN_MESSAGE);
 				b = false;
@@ -632,8 +632,8 @@ public class BankSystem extends JFrame implements ActionListener, ItemListener {
 			else {
 				b = true;
 				try {
-					db.dis.close();
-					db.fis.close();
+					db.getDis().close();
+					db.getFis().close();
 				}
 				catch (Exception exp) { }
 			}
@@ -647,8 +647,8 @@ public class BankSystem extends JFrame implements ActionListener, ItemListener {
 	void findRec (String rec) {
 
 		boolean found = false;
-		for (int x = 0; x < db.total; x++) {
-			if (db.records[x].getAccountNumber().equals (rec)) {
+		for (int x = 0; x < db.getTotal(); x++) {
+			if (db.getRecords()[x].getAccountNumber().equals (rec)) {
 				found = true;
 				printRecord (makeRecordPrint (x));
 				break;
@@ -669,10 +669,10 @@ public class BankSystem extends JFrame implements ActionListener, ItemListener {
 		String data;
 		String data0 = "               BankSystem [Pvt] Limited.               \n";	//Page Title.
 		String data1 = "               Customer Balance Report.              \n\n";	//Page Header.
-		String data2 = "  Account No.:       " + db.records[rec].getAccountNumber() + "\n";
-		String data3 = "  Customer Name:     " + db.records[rec].getCustomerName() + "\n";
-		String data4 = "  Last Transaction:  " + db.records[rec].getMonth() + ", " + db.records[rec].getDate() + ", " + db.records[rec].getYear() + "\n";
-		String data5 = "  Current Balance:   " + db.records[rec].getBalance() + "\n\n";
+		String data2 = "  Account No.:       " + db.getRecords()[rec].getAccountNumber() + "\n";
+		String data3 = "  Customer Name:     " + db.getRecords()[rec].getCustomerName() + "\n";
+		String data4 = "  Last Transaction:  " + db.getRecords()[rec].getMonth() + ", " + db.getRecords()[rec].getDate() + ", " + db.getRecords()[rec].getYear() + "\n";
+		String data5 = "  Current Balance:   " + db.getRecords()[rec].getBalance() + "\n\n";
 		String data6 = "          Copyright � 2003 Muhammad Wasif Javed.\n";	//Page Footer.
 		String sep0 = " -----------------------------------------------------------\n";
 		String sep1 = " -----------------------------------------------------------\n";

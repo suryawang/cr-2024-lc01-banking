@@ -47,7 +47,7 @@ public class WithdrawMoney extends JInternalFrame implements ActionListener {
 			public void focusLost(FocusEvent fe) {
 				if (txtNo.getText().equals("")) {
 				} else {
-					db.rows = 0;
+					db.setRows(0);
 					populateArray(); // Load All Existing Records in Memory.
 					findRec(); // Finding if Account No. Already Exist or Not.
 				}
@@ -176,27 +176,27 @@ public class WithdrawMoney extends JInternalFrame implements ActionListener {
 	void populateArray() {
 
 		try {
-			db.fis = new FileInputStream("Bank.dat");
-			db.dis = new DataInputStream(db.fis);
+			db.setFis(new FileInputStream("Bank.dat"));
+			db.setDis(new DataInputStream(db.getFis()));
 			// Loop to Populate the Array.
 			while (true) {
 				String r[] = new String[6];
 				for (int i = 0; i < 6; i++) {
-					r[i] = db.dis.readUTF();
+					r[i] = db.getDis().readUTF();
 				}
-				db.records[db.rows] = DataRecord.from(r);
-				db.rows++;
+				db.getRecords()[db.getRows()] = DataRecord.from(r);
+				db.setRows(db.getRows() + 1);
 			}
 		} catch (Exception ex) {
-			db.total = db.rows;
-			if (db.total == 0) {
+			db.setTotal(db.getRows());
+			if (db.getTotal() == 0) {
 				JOptionPane.showMessageDialog(null, "Records File is Empty.\nEnter Records First to Display.",
 						"BankSystem - EmptyFile", JOptionPane.PLAIN_MESSAGE);
 				btnEnable();
 			} else {
 				try {
-					db.dis.close();
-					db.fis.close();
+					db.getDis().close();
+					db.getFis().close();
 				} catch (Exception exp) {
 				}
 			}
@@ -209,8 +209,8 @@ public class WithdrawMoney extends JInternalFrame implements ActionListener {
 	void findRec() {
 
 		boolean found = false;
-		for (int x = 0; x < db.total; x++) {
-			if (db.records[x].getAccountNumber().equals(txtNo.getText())) {
+		for (int x = 0; x < db.getTotal(); x++) {
+			if (db.getRecords()[x].getAccountNumber().equals(txtNo.getText())) {
 				found = true;
 				showRec(x);
 				break;
@@ -228,10 +228,10 @@ public class WithdrawMoney extends JInternalFrame implements ActionListener {
 	// Function which display Record from Array onto the Form.
 	public void showRec(int intRec) {
 
-		txtNo.setText(db.records[intRec].getAccountNumber());
-		txtName.setText(db.records[intRec].getCustomerName());
-		curr = db.records[intRec].getBalance();
-		db.count = intRec;
+		txtNo.setText(db.getRecords()[intRec].getAccountNumber());
+		txtName.setText(db.getRecords()[intRec].getCustomerName());
+		curr = db.getRecords()[intRec].getBalance();
+		db.setCount(intRec);
 
 	}
 
@@ -248,12 +248,12 @@ public class WithdrawMoney extends JInternalFrame implements ActionListener {
 	// Function use to Edit an Element's Value of the Array.
 	public void editRec() {
 
-		db.records[db.count].setAccountNumber(txtNo.getText());
-		db.records[db.count].setCustomerName(txtName.getText());
-		db.records[db.count].setMonth(cboMonth.getSelectedItem().toString());
-		db.records[db.count].setDate(Integer.parseInt(cboDay.getSelectedItem().toString()));
-		db.records[db.count].setYear(Integer.parseInt(cboYear.getSelectedItem().toString()));
-		db.records[db.count].setBalance((curr - withdraw));
+		db.getRecords()[db.getCount()].setAccountNumber(txtNo.getText());
+		db.getRecords()[db.getCount()].setCustomerName(txtName.getText());
+		db.getRecords()[db.getCount()].setMonth(cboMonth.getSelectedItem().toString());
+		db.getRecords()[db.getCount()].setDate(Integer.parseInt(cboDay.getSelectedItem().toString()));
+		db.getRecords()[db.getCount()].setYear(Integer.parseInt(cboYear.getSelectedItem().toString()));
+		db.getRecords()[db.getCount()].setBalance((curr - withdraw));
 		editFile(); // Save This Array to File.
 
 	}
@@ -264,9 +264,9 @@ public class WithdrawMoney extends JInternalFrame implements ActionListener {
 		try {
 			FileOutputStream fos = new FileOutputStream("Bank.dat");
 			DataOutputStream dos = new DataOutputStream(fos);
-			if (db.records != null) {
-				for (int i = 0; i < db.total; i++) {
-					var r = db.records[i].toArray();
+			if (db.getRecords() != null) {
+				for (int i = 0; i < db.getTotal(); i++) {
+					var r = db.getRecords()[i].toArray();
 					for (int c = 0; c < 6; c++) {
 						dos.writeUTF(r[c]);
 						if (r[c] == null)
