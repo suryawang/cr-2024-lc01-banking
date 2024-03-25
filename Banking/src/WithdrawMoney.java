@@ -14,7 +14,7 @@ public class WithdrawMoney extends JInternalFrame implements ActionListener {
 	private int curr;
 	private int withdraw;
 
-	private RecordHandler db = new RecordHandler(0, 0, 0, new DataRecord[500]);
+	RecordHandler db = new RecordHandler(0, 0, 0, new DataRecord[500]);
 
 	WithdrawMoney() {
 
@@ -48,7 +48,7 @@ public class WithdrawMoney extends JInternalFrame implements ActionListener {
 				if (txtNo.getText().equals("")) {
 				} else {
 					db.setRows(0);
-					populateArray(); // Load All Existing Records in Memory.
+					check(db.populateArray()); // Load All Existing Records in Memory.
 					findRec(); // Finding if Account No. Already Exist or Not.
 				}
 			}
@@ -127,11 +127,18 @@ public class WithdrawMoney extends JInternalFrame implements ActionListener {
 		// Adding Panel to Window.
 		getContentPane().add(jpWith);
 
-		populateArray(); // Load All Existing Records in Memory.
+		check(db.populateArray()); // Load All Existing Records in Memory.
 
 		// In the End Showing the New Account Window.
 		setVisible(true);
 
+	}
+	private void check(int rows) {
+		if (rows == 0) {
+			JOptionPane.showMessageDialog(null, "Records File is Empty.\nEnter Records First to Display.",
+					"BankSystem - EmptyFile", JOptionPane.PLAIN_MESSAGE);
+			btnEnable();
+		}
 	}
 
 	// Function use By Buttons of Window to Perform Action as User Click Them.
@@ -168,38 +175,6 @@ public class WithdrawMoney extends JInternalFrame implements ActionListener {
 			txtClear();
 			setVisible(false);
 			dispose();
-		}
-
-	}
-
-	// Function use to load all Records from File when Application Execute.
-	void populateArray() {
-
-		try {
-			db.setFis(new FileInputStream("Bank.dat"));
-			db.setDis(new DataInputStream(db.getFis()));
-			// Loop to Populate the Array.
-			while (true) {
-				String r[] = new String[6];
-				for (int i = 0; i < 6; i++) {
-					r[i] = db.getDis().readUTF();
-				}
-				db.getRecords()[db.getRows()] = DataRecord.from(r);
-				db.setRows(db.getRows() + 1);
-			}
-		} catch (Exception ex) {
-			db.setTotal(db.getRows());
-			if (db.getTotal() == 0) {
-				JOptionPane.showMessageDialog(null, "Records File is Empty.\nEnter Records First to Display.",
-						"BankSystem - EmptyFile", JOptionPane.PLAIN_MESSAGE);
-				btnEnable();
-			} else {
-				try {
-					db.getDis().close();
-					db.getFis().close();
-				} catch (Exception exp) {
-				}
-			}
 		}
 
 	}

@@ -1,14 +1,14 @@
 import java.io.DataInputStream;
 import java.io.FileInputStream;
 
+import javax.swing.JOptionPane;
+
 public class RecordHandler {
 	private int count;
 	private int rows;
 	private int total;
 	private DataRecord[] records;
-	private FileInputStream fis;
-	private DataInputStream dis;
-
+	
 	public RecordHandler(int count, int rows, int total, DataRecord[] records) {
 		this.setCount(count);
 		this.setRows(rows);
@@ -48,19 +48,35 @@ public class RecordHandler {
 		this.records = records;
 	}
 
-	public FileInputStream getFis() {
-		return fis;
-	}
+	int populateArray() {
+		FileInputStream fis=null;
+		DataInputStream dis=null;
 
-	public void setFis(FileInputStream fis) {
-		this.fis = fis;
-	}
+		try {
+			fis = new FileInputStream("Bank.dat");
+			dis = new DataInputStream(fis);
+			// Loop to Populate the Array.
+			while (true) {
+				String r[] = new String[6];
+				for (int i = 0; i < 6; i++) {
+					r[i] = dis.readUTF();
+				}
+				getRecords()[getRows()] = DataRecord.from(r);
+				setRows(getRows() + 1);
+			}
 
-	public DataInputStream getDis() {
-		return dis;
-	}
-
-	public void setDis(DataInputStream dis) {
-		this.dis = dis;
+		} catch (Exception ex) {
+			setTotal(getRows());
+			if (getTotal() == 0) {
+				return 0;
+			} else {
+				try {
+					dis.close();
+					fis.close();
+				} catch (Exception exp) {
+				}
+			}
+		}
+		return getRows();
 	}
 }

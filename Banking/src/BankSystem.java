@@ -583,7 +583,7 @@ public class BankSystem extends JFrame implements ActionListener, ItemListener {
 
 		String printing;
 		db.setRows(0);
-		boolean b = populateArray ();
+		boolean b = db.populateArray ()>0;
 		if (b == false) { }
 		else {
 			try {
@@ -605,42 +605,7 @@ public class BankSystem extends JFrame implements ActionListener, ItemListener {
 	}
 
 	//Function use to load all Records from File when Application Execute.
-
-	boolean populateArray () {
-
-		boolean b = false;
-		try {
-			db.setFis(new FileInputStream ("Bank.dat"));
-			db.setDis(new DataInputStream (db.getFis()));
-			//Loop to Populate the Array.
-			while (true) {
-				String r[] = new String[6];
-				for (int i = 0; i < 6; i++) {
-					r[i] = db.getDis().readUTF ();
-				}
-				db.getRecords()[db.getRows()] = DataRecord.from(r);
-				db.setRows(db.getRows() + 1);
-			}
-		}
-		catch (Exception ex) {
-			db.setTotal(db.getRows());
-			if (db.getTotal() == 0) {
-				JOptionPane.showMessageDialog (null, "Records File is Empty.\nEnter Records First to Display.",
-					 "BankSystem - EmptyFile", JOptionPane.PLAIN_MESSAGE);
-				b = false;
-			}
-			else {
-				b = true;
-				try {
-					db.getDis().close();
-					db.getFis().close();
-				}
-				catch (Exception exp) { }
-			}
-		}
-		return b;
-
-	}
+	
 
 	//Function use to Find Record by Matching the Contents of Records Array with InputBox.
 
