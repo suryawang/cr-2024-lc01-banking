@@ -58,17 +58,9 @@ public class BankSystem extends JFrame implements ActionListener, ItemListener {
 
 	//Following all Variables are use in BankSystem's IO's.
 
-	//Variable use in Reading the BankSystem Records File & Store it in an Array.
-	private int count = 0;
-	private int rows = 0;
-	private	int total = 0;
+	private RecordHandler db = new RecordHandler(0, 0, 0, new DataRecord [500]);
 
-	//String Type Array use to Load Records From File.
-	private DataRecord records[] = new DataRecord [500];
-
-	//Variable for Reading the BankSystem Records File.
-	private FileInputStream fis;
-	private DataInputStream dis;
+	
 
 	//Constructor of The Bank Program to Iniatilize all Variables of Program.
 
@@ -590,7 +582,7 @@ public class BankSystem extends JFrame implements ActionListener, ItemListener {
 	void getAccountNo () {
 
 		String printing;
-		rows = 0;
+		db.rows = 0;
 		boolean b = populateArray ();
 		if (b == false) { }
 		else {
@@ -618,21 +610,21 @@ public class BankSystem extends JFrame implements ActionListener, ItemListener {
 
 		boolean b = false;
 		try {
-			fis = new FileInputStream ("Bank.dat");
-			dis = new DataInputStream (fis);
+			db.fis = new FileInputStream ("Bank.dat");
+			db.dis = new DataInputStream (db.fis);
 			//Loop to Populate the Array.
 			while (true) {
 				String r[] = new String[6];
 				for (int i = 0; i < 6; i++) {
-					r[i] = dis.readUTF ();
+					r[i] = db.dis.readUTF ();
 				}
-				records[rows] = DataRecord.from(r);
-				rows++;
+				db.records[db.rows] = DataRecord.from(r);
+				db.rows++;
 			}
 		}
 		catch (Exception ex) {
-			total = rows;
-			if (total == 0) {
+			db.total = db.rows;
+			if (db.total == 0) {
 				JOptionPane.showMessageDialog (null, "Records File is Empty.\nEnter Records First to Display.",
 					 "BankSystem - EmptyFile", JOptionPane.PLAIN_MESSAGE);
 				b = false;
@@ -640,8 +632,8 @@ public class BankSystem extends JFrame implements ActionListener, ItemListener {
 			else {
 				b = true;
 				try {
-					dis.close();
-					fis.close();
+					db.dis.close();
+					db.fis.close();
 				}
 				catch (Exception exp) { }
 			}
@@ -655,8 +647,8 @@ public class BankSystem extends JFrame implements ActionListener, ItemListener {
 	void findRec (String rec) {
 
 		boolean found = false;
-		for (int x = 0; x < total; x++) {
-			if (records[x].getAccountNumber().equals (rec)) {
+		for (int x = 0; x < db.total; x++) {
+			if (db.records[x].getAccountNumber().equals (rec)) {
 				found = true;
 				printRecord (makeRecordPrint (x));
 				break;
@@ -677,10 +669,10 @@ public class BankSystem extends JFrame implements ActionListener, ItemListener {
 		String data;
 		String data0 = "               BankSystem [Pvt] Limited.               \n";	//Page Title.
 		String data1 = "               Customer Balance Report.              \n\n";	//Page Header.
-		String data2 = "  Account No.:       " + records[rec].getAccountNumber() + "\n";
-		String data3 = "  Customer Name:     " + records[rec].getCustomerName() + "\n";
-		String data4 = "  Last Transaction:  " + records[rec].getMonth() + ", " + records[rec].getDate() + ", " + records[rec].getYear() + "\n";
-		String data5 = "  Current Balance:   " + records[rec].getBalance() + "\n\n";
+		String data2 = "  Account No.:       " + db.records[rec].getAccountNumber() + "\n";
+		String data3 = "  Customer Name:     " + db.records[rec].getCustomerName() + "\n";
+		String data4 = "  Last Transaction:  " + db.records[rec].getMonth() + ", " + db.records[rec].getDate() + ", " + db.records[rec].getYear() + "\n";
+		String data5 = "  Current Balance:   " + db.records[rec].getBalance() + "\n\n";
 		String data6 = "          Copyright � 2003 Muhammad Wasif Javed.\n";	//Page Footer.
 		String sep0 = " -----------------------------------------------------------\n";
 		String sep1 = " -----------------------------------------------------------\n";

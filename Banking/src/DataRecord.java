@@ -2,6 +2,24 @@
 public class DataRecord {
 	private String accountNumber;
 	private String customerName;
+	public void setAccountNumber(String accountNumber) {
+		this.accountNumber = accountNumber;
+	}
+	public void setCustomerName(String customerName) {
+		this.customerName = customerName;
+	}
+	public void setMonth(String month) {
+		this.month = month;
+	}
+	public void setDate(int date) {
+		this.date = date;
+	}
+	public void setYear(int year) {
+		this.year = year;
+	}
+	public void setBalance(int balance) {
+		this.balance = balance;
+	}
 	private String month;
 	private int date;
 	private int year;
@@ -17,6 +35,9 @@ public class DataRecord {
 		r.year = Integer.parseInt(ar[4]);
 		r.balance = Integer.parseInt(ar[5]);
 		return r;
+	}
+	public String[] toArray() {
+		return new String[] {accountNumber, customerName, month, date+"",year+"",balance+""};
 	}
 	public String getAccountNumber() {
 		return accountNumber;
