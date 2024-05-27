@@ -33,6 +33,12 @@ public class CustomerRepository {
 				return o;
 		return null;
 	}
+	public int size() {
+		return records.size();
+	}
+	public Vector<CustomerRecord> getRecords(){
+		return records;
+	}
 	public void Add(CustomerRecord record) throws IOException {
 			FileOutputStream fos = new FileOutputStream("Bank.dat", true);
 			DataOutputStream dos = new DataOutputStream(fos);

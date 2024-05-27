@@ -111,7 +111,7 @@ public class FindName extends JInternalFrame implements ActionListener {
 	}
 
 	//Function use to load all Records from File when Application Execute.
-	void populateArray () {
+	private void populateArray () {
 
 		try {
 			fis = new FileInputStream ("Bank.dat");
@@ -143,7 +143,7 @@ public class FindName extends JInternalFrame implements ActionListener {
 	}
 
 	//Function use to Find Record by Matching the Contents of Records Array with ID TextBox.
-	void findRec () {
+	private void findRec () {
 
 		boolean found = false;
 		for (int x = 0; x < total; x++) {
