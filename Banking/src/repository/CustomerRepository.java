@@ -6,10 +6,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Vector;
-
-import javax.swing.JOptionPane;
 
 import model.CustomerRecord;
 
@@ -30,17 +27,20 @@ public class CustomerRepository {
 				return true;
 		return false;
 	}
+	public CustomerRecord find(String account_no) {
+		for (var o : records)
+			if (o.getAccount_no().equals(account_no))
+				return o;
+		return null;
+	}
 	public void Add(CustomerRecord record) throws IOException {
 			FileOutputStream fos = new FileOutputStream("Bank.dat", true);
 			DataOutputStream dos = new DataOutputStream(fos);
-			var y = new SimpleDateFormat("yyyy");
-			var m = new SimpleDateFormat("MMMM");
-			var d = new SimpleDateFormat("dd");
 			dos.writeUTF(record.getAccount_no());
 			dos.writeUTF(record.getName());
-			dos.writeUTF(m.format(record.getDate()));
-			dos.writeUTF(d.format(record.getDate()));
-			dos.writeUTF(y.format(record.getDate()));
+			dos.writeUTF(record.getMonth());
+			dos.writeUTF(record.getDay());
+			dos.writeUTF(record.getYear());
 			dos.writeUTF(""+record.getBalance());
 			records.add(record);
 			dos.close();

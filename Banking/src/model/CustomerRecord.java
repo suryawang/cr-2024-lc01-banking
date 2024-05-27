@@ -1,5 +1,6 @@
 package model;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class CustomerRecord {
@@ -14,6 +15,7 @@ public class CustomerRecord {
 		this.date = date;
 		this.balance = balance;
 	}
+
 	public Date getDate() {
 		return date;
 	}
@@ -36,5 +38,20 @@ public class CustomerRecord {
 
 	public String getName() {
 		return name;
+	}
+
+	public String getDay() {
+		var y = new SimpleDateFormat("dd");
+		return y.format(date);
+	}
+
+	public String getMonth() {
+		var y = new SimpleDateFormat("MMMM");
+		return y.format(date);
+	}
+
+	public String getYear() {
+		var y = new SimpleDateFormat("yyyy");
+		return y.format(date);
 	}
 }
